@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <unordered_map>
+#include <unordered_set>
 
 #include "../PAT_HojaDeTrabajo03/Node.h"
 #include "../PAT_HojaDeTrabajo03/Ejercicio03.h"
@@ -16,6 +17,7 @@ using ::std::tuple;
 using ::std::string;
 using ::std::vector;
 using ::std::unordered_map;
+using ::std::unordered_set;
 
 namespace HojaDeTrabajo03Tests {
 
@@ -100,6 +102,8 @@ namespace HojaDeTrabajo03Tests {
 		vector<Node<int>*> originalNodes(param.size());
 
 		unordered_map<Node<int>*, Node<int>*> map;
+		unordered_set<Node<int>*> copiedSet;
+		unordered_set<Node<int>*> originalSet(originalNodes.begin(), originalNodes.end());
 
 		int i = 0;
 		while (c && h) {
@@ -107,6 +111,14 @@ namespace HojaDeTrabajo03Tests {
 
 			ASSERT_EQ(h->value, c->value) << "El nodo en la posicion [" << i << "] no tiene el mismo valor que en la lista original."
 				<< " Se esperaba [" << h->value << "], pero se encontro [" << c->value << "].";
+
+			ASSERT_TRUE(copiedSet.find(c) == copiedSet.end())
+				<< "El nodo en la posicion [" << i << "] se encuentra duplicado.";
+
+			copiedSet.insert(c);
+
+			ASSERT_TRUE(originalSet.find(c) == originalSet.end())
+				<< "El nodo en la posicion [" << i << "] pertenece a la lista original.";
 
 			copiedNodes[i] = c;
 			originalNodes[i] = h;
