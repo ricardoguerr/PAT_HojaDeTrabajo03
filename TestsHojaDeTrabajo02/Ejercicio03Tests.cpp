@@ -5,7 +5,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include <unordered_set>
+#include <unordered_map>
 
 #include "../PAT_HojaDeTrabajo03/Node.h"
 #include "../PAT_HojaDeTrabajo03/Ejercicio03.h"
@@ -15,7 +15,7 @@ using ::testing::ValuesIn;
 using ::std::tuple;
 using ::std::string;
 using ::std::vector;
-using ::std::unordered_set;
+using ::std::unordered_map;
 
 namespace HojaDeTrabajo03Tests {
 
@@ -99,6 +99,8 @@ namespace HojaDeTrabajo03Tests {
 		vector<Node<int>*> copiedNodes(param.size());
 		vector<Node<int>*> originalNodes(param.size());
 
+		unordered_map<Node<int>*, Node<int>*> map;
+
 		int i = 0;
 		while (c && h) {
 			ASSERT_NE(h, c) << "El nodo en la posicion [" << i << "] del resultado pertenece a la lista original, no es una copia.";
@@ -109,6 +111,8 @@ namespace HojaDeTrabajo03Tests {
 			copiedNodes[i] = c;
 			originalNodes[i] = h;
 
+			map[h] = c;
+
 			c = c->next;
 			h = h->next;
 			++i;
@@ -116,26 +120,35 @@ namespace HojaDeTrabajo03Tests {
 
 		ASSERT_TRUE(c == nullptr && h == nullptr) << "La cantidad de nodos no es la esperada.";
 
+		Node<int>* originalIt; Node<int>* copiedIt;
+
 		for (int i = 0; i < param.size(); i++) {
 			const auto& pair = param[i];
 
 			int value = std::get<0>(pair);
 			int randomIndex = std::get<1>(pair);
-			if (originalNodes[randomIndex] && copiedNodes[randomIndex]) {
-				ASSERT_NE(originalNodes[randomIndex], copiedNodes[randomIndex])
+
+			originalIt = randomIndex >= 0 ? originalNodes[randomIndex] : nullptr;
+			copiedIt = randomIndex >= 0 ? copiedNodes[randomIndex] : nullptr;
+
+			if (originalIt && copiedIt) {
+				ASSERT_NE(originalIt, copiedIt)
 					<< "El nodo random en la posicion [" << i << "] del resultado pertenece a la lista original, no es una copia.";
+
+				ASSERT_EQ(map[originalIt], copiedIt)
+					<< "El nodo random en la posicion [" << i << "] del resultado no pertenece a la lista copiada.";
 			}
 			else {
-				ASSERT_TRUE(originalNodes[randomIndex] == nullptr && copiedNodes[randomIndex] == nullptr)
+				ASSERT_TRUE(originalIt == nullptr && copiedIt == nullptr)
 					<< "El nodo random en la posicion [" << i << "] del resultado no apunta a una direccion de memoria equivalente."
-					<< "Se esperaba que apuntara a " << (originalNodes[randomIndex] ? "[new Node]" : "[nullptr]") 
-					<< ", pero apunta a " << (copiedNodes[randomIndex] ? "[new Node]" : "[nullptr]");
+					<< "Se esperaba que apuntara a " << (copiedIt ? "[new Node]" : "[nullptr]")
+					<< ", pero apunta a " << (copiedIt ? "[new Node]" : "[nullptr]");
 			}
 
-			if (originalNodes[randomIndex] && copiedNodes[randomIndex]) {
-				ASSERT_EQ(originalNodes[randomIndex]->value, copiedNodes[randomIndex]->value)
+			if (originalIt && copiedIt) {
+				ASSERT_EQ(originalIt->value, copiedIt->value)
 					<< "El nodo random en la posicion [" << i << "] del resultado no tiene el mismo valor que en la lista original."
-					<< " Se esperaba [" << originalNodes[randomIndex]->value << "], pero se encontro [" << copiedNodes[randomIndex]->value << "].";
+					<< " Se esperaba [" << originalIt->value << "], pero se encontro [" << copiedIt->value << "].";
 			}
 		}
 	}

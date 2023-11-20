@@ -97,7 +97,7 @@ namespace HojaDeTrabajo03Tests {
 		vector<vector<string>>* actualResult = e02->groupAnagrams(param);
 
 		ASSERT_TRUE(actualResult != nullptr)
-			<< "El resultado es nullptr!";
+			<< "El resultado es [nullptr]";
 
 		int aSize = actualResult->size();
 		int eSize = expectedResult.size();

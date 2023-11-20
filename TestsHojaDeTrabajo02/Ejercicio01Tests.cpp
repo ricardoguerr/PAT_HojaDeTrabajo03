@@ -62,10 +62,11 @@ namespace HojaDeTrabajo03Tests {
 		int* nums = &param[0];
 		int n = param.size();
 
-		int actualResult = e01->findMin(nums, n);
-
+		ASSERT_DURATION_LE(1000,
+			int actualResult = e01->findMin(nums, n);
+			
 		ASSERT_EQ(expectedResult, actualResult) << "El valor [" << actualResult << "] no es el esperado. Se esperaba ["
-			<< expectedResult << "].";
+				<< expectedResult << "].";)
 	}
 
 	INSTANTIATE_TEST_CASE_P(E01Minimo, E01Tests, ValuesIn(E01Tests::ReadParams()));
