@@ -1,6 +1,6 @@
-# Parcial de Reposición
+# Hoja de Trabajo 03
 
-- [Parcial de Reposición](#parcial-de-reposición)
+- [Hoja de Trabajo 03](#hoja-de-trabajo-03)
   - [Instrucciones](#instrucciones)
   - [Introducción](#introducción)
   - [Ejercicio 1 (**30** puntos)](#ejercicio-1-30-puntos)
